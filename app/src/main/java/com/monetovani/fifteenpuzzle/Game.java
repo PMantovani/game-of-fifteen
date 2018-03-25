@@ -43,12 +43,12 @@ class Game {
         mPlayCount = 0;
     }
 
-    void executeMove(View view) {
+    boolean executeMove(View view) {
         // Gets Tile corresponding to the view
         Tile tile = mTilesMap.get(view.getId());
 
         if (mWon) {
-            return; // If game is finished, don't do anything
+            return false; // If game is finished, don't do anything
         }
 
         // Checks if tile is adjacent to empty tile
@@ -58,11 +58,11 @@ class Game {
         }
 
         // Checks if after this move, the game has been finished
-        if (hasWon()) {
-        }
-        else {
+        if (!hasWon()) {
             mPlayCount++;
         }
+
+        return true;
     }
 
     private void initializeTiles() {
@@ -173,19 +173,22 @@ class Game {
 
         for (int i=0; i<BOARD_LENGTH; i++) {
             for (int j=0; j<BOARD_LENGTH; j++) {
-                if (mIndexedTiles[i][j].getValue() != checkValue) {
+                if (mIndexedTiles[i][j].getValue() != checkValue &&
+                        !(i==BOARD_LENGTH-1 && j==BOARD_LENGTH-1)) {
                     mWon = false;
                     return false;
-                }
-                else if (i==BOARD_LENGTH-1 && j==BOARD_LENGTH-1) {
-                    mWon = true;
-                    return true;
                 }
 
                 checkValue++;
             }
         }
+        mWon = true;
         return true;
     }
+
+    public boolean checkPuzzleFinished() {
+        return mWon;
+    }
+
 
 }

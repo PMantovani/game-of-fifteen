@@ -1,7 +1,9 @@
 package com.monetovani.fifteenpuzzle;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -37,10 +39,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onTileClick(View view) {
-        mGame.executeMove(view);
+        if (mGame.executeMove(view)) {
+            if (mGame.checkPuzzleFinished()) {
+                showWinAlert();
+            }
+        }
     }
 
     public void onRestartClick(View view) {
         mGame.restartGame();
+    }
+
+
+    private void showWinAlert() {
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Congratulations");
+        alertDialog.setMessage("Congratulations! You have finished the puzzle!");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }
